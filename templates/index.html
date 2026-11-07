@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Packer — Plan it. Pack it.</title><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-icon">P</div><div><strong>PACKER</strong><span>AI PACKING SYSTEM</span></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <a href="#planner" class="nav-link current">✦ &nbsp;Planner</a>
+    <a href="#timetable" class="nav-link">▦ &nbsp;Timetable Reader</a>
+    <a href="#timeline" class="nav-link">◷ &nbsp;Timeline</a>
+    <a href="#packing" class="nav-link">▣ &nbsp;Packing queue</a>
+    <a href="#vision" class="nav-link">◎ &nbsp;Computer vision</a>
+    <div class="side-bottom"><div class="online-dot"></div><span>LOCAL HACKATHON BUILD</span><p>Real decisions. Real objects.<br>Human-supervised robot demo.</p></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="eyebrow">PHYSICAL AI / PROJECT 01</div><div class="topbar-right"><span class="pill" id="ai-status">CHECKING AI...</span><span class="pill soft">BAG ZONE v1.2</span></div></header>
+    <section id="planner" class="hero"><div class="hero-copy"><div class="small-title">YOUR DAY, HANDLED.</div><h1>Less packing.<br><em>More living.</em></h1><p>Tell Packer your plans. It works out what you need, checks the weather, and guides the robot through packing.</p></div><div class="hero-drawing" aria-hidden="true"><div class="bag-handle"></div><div class="bag"><div class="bag-pocket"><span>PACKER</span></div></div><div class="floating-object bottle">▯</div><div class="floating-object book">▤</div></div></section>
+    <section class="grid-main"><div class="panel plan-panel"><div class="panel-header"><div><div class="eyebrow">01 / INPUT</div><h2>Plan your day</h2></div><span class="pill soft">PROMPT → PLAN</span></div>
+      <label for="prompt">What's the plan?</label><textarea id="prompt" rows="3" placeholder="Tomorrow I have science at school, then I'm playing football with friends...">Tomorrow I have math and science at school, then I'm playing football with friends.</textarea>
+      <div class="modes"><button type="button" class="mode active" data-mode="auto">✦ Auto</button><button type="button" class="mode" data-mode="school">▤ School</button><button type="button" class="mode" data-mode="friends">⚽ Friends</button><button type="button" class="mode" data-mode="vacation">▧ Vacation</button></div>
+      <div class="fields"><div><label for="date">Date</label><input type="date" id="date"></div><div><label for="destination">Destination / weather city</label><input id="destination" value="Tokyo" placeholder="Tokyo"></div><div><label for="days">Days</label><input id="days" type="number" min="1" max="14" value="1"></div></div>
+      <button id="generate" class="primary-btn">✦ &nbsp;Generate packing plan <span>↗</span></button><div class="hint" id="message" role="status">Enter your plans and generate a packing plan.</div>
+    </div><div class="right-stack"><div class="panel weather-panel"><div class="panel-header"><div><div class="eyebrow">02 / CONTEXT</div><h2>Weather intelligence</h2></div><span class="weather-icon">☁</span></div><div class="weather-value" id="weather-temp">—</div><div class="weather-sub" id="weather-desc">Weather will load after planning.</div><div class="weather-row" id="weather-row"><span>↗ Live forecast when available</span></div><div class="weather-credit">Weather data: Open-Meteo</div></div>
+    <div class="panel stats-panel"><div class="eyebrow">PACKING PROGRESS</div><div class="stats-row"><div><div class="big-stat" id="packed-count">0 <span>/ 0</span></div><div class="muted">Items packed</div></div><div class="completion" id="completion">0%</div></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div><div class="muted tiny">Packing requires physical confirmation. Detection ≠ packed.</div></div></div></section>
+    <section class="panel timetable-panel" id="timetable">
+      <div class="panel-header"><div><div class="eyebrow">03 / SCHOOL INTELLIGENCE</div><h2>時間割 Reader · School timetable</h2></div><span id="timetable-ai-status" class="pill soft">IMAGE → SUBJECTS</span></div>
+      <p class="muted">Upload a timetable photo for AI reading, or enter the subjects manually. Review the result before generating your plan. Your edited timetable is stored in this browser.</p>
+      <div class="timetable-actions"><label class="upload-photo" for="timetable-file">📷 Upload timetable photo</label><input type="file" id="timetable-file" accept="image/jpeg,image/png,image/webp" hidden>
+      <button type="button" id="timetable-capture" class="secondary-btn">Capture YOLO camera frame</button><button type="button" id="timetable-clear" class="secondary-btn">Clear timetable</button></div>
+      <div id="timetable-message" class="hint" role="status">Optional photo extraction uses Claude vision (API key required). Manual editing always works.</div>
+      <div class="timetable-scroll"><table class="school-grid"><thead><tr><th>Period</th><th>Mon / 月</th><th>Tue / 火</th><th>Wed / 水</th><th>Thu / 木</th><th>Fri / 金</th></tr></thead><tbody id="timetable-grid"></tbody></table></div>
+      <div class="timetable-bottom"><label class="timetable-option"><input type="checkbox" id="timetable-enabled" checked> Use timetable when planning for school</label><span id="timetable-day-info" class="muted">Choose a school day above.</span></div>
+    </section>
+    <section class="grid-main lower-grid"><div class="panel" id="timeline"><div class="panel-header"><div><div class="eyebrow">04 / SCHEDULE</div><h2>Activity timeline</h2></div><span class="pill soft" id="timeline-total">0 ACTIVITIES</span></div><div id="timeline-list" class="timeline-list"><div class="empty">Generate a plan to see your daily timeline.</div></div></div>
+      <div class="panel" id="packing"><div class="panel-header"><div><div class="eyebrow">05 / ROBOT INSTRUCTIONS</div><h2>Packing queue</h2></div><span class="pill" id="queue-total">0 ITEMS</span></div><div class="current-task"><span class="eyebrow">NEXT ACTION</span><strong id="next-item">Waiting for a plan</strong><span class="muted" id="next-desc">Items will appear here in recommended order.</span></div><div id="item-list" class="item-list"><div class="empty">Your packing list will appear here.</div></div></div></section>
+    <section class="panel microbit-panel" id="microbit"><div class="panel-header"><div><div class="eyebrow">06 / PHYSICAL VERIFICATION</div><h2>micro:bit · Packing confirmation</h2></div><span id="microbit-status" class="pill soft">NOT CONNECTED</span></div>
+      <p class="muted">Camera tracking can flag a <strong>possible placement</strong> when the selected object is seen moving from the table into the bag area. <strong>It cannot confirm that the object stayed inside.</strong> Check the bag, then press micro:bit <strong>A</strong> to confirm or <strong>B</strong> to retry.</p>
+      <div class="microbit-controls"><input id="microbit-port" aria-label="micro:bit serial port" placeholder="auto or COM4" value="auto"><button class="secondary-btn" id="microbit-connect">Connect micro:bit</button></div>
+      <div class="microbit-buttons"><div class="microbit-key"><strong>A</strong><span>✓ Packed (operator confirmed)</span></div><div class="microbit-key"><strong>B</strong><span>↺ Failed — retry</span></div></div>
+      <div class="hint" id="microbit-message" role="status">Optional USB controller. Without a micro:bit, the existing Packed ✓ buttons still work.</div>
+    </section>
+    <section class="panel vision-panel" id="vision"><div class="panel-header"><div><div class="eyebrow">07 / COMPUTER VISION</div><h2>YOLO object detection</h2></div><div class="vision-actions"><span id="vision-indicator" class="pill soft">CAMERA OFF</span><button class="secondary-btn" id="vision-toggle">Start camera</button></div></div>
+      <div class="bag-zone-controls"><button type="button" class="secondary-btn" id="bag-zone-set">Draw bag area</button><button type="button" class="secondary-btn" id="bag-zone-reset">Reset area</button><span class="muted tiny" id="bag-zone-help">Position the camera so the table and open bag are visible. Draw around the bag opening.</span></div>
+      <div class="vision-grid"><div class="camera-frame" id="camera-box"><div id="camera-stage" hidden><img id="camera-feed" alt="YOLO camera with bounding boxes"><div id="bag-zone-overlay"><span>BAG AREA</span></div><div id="zone-draw" aria-label="Drag to select the bag area"></div></div><div id="camera-placeholder"><span class="camera-icon">◎</span><strong>Camera is offline</strong><span>Install YOLO dependencies, then start the camera.</span></div></div><div class="detection-list"><div class="eyebrow">LIVE DETECTIONS</div><div class="muted tiny" style="margin-top:8px">YOLO only identifies classes it was trained for. Undetectable items must be confirmed manually.</div><div id="detections"><div class="empty">No detections yet.</div></div></div></div><div id="bag-zone-status" class="bag-zone-status" role="status">Bag-area tracking is waiting for a packing plan and live YOLO detections.</div><div class="hint" id="vision-message">Camera feed runs locally; model downloads may need internet on first use.</div>
+    </section>
+    <footer>PACKER / A TWO-DAY PHYSICAL AI PROTOTYPE <span>Weather and object detection may be unavailable. Do not claim automatic robot control.</span></footer>
+  </main>
+</div>
+<script src="/static/app.js"></script>
+</body></html>
